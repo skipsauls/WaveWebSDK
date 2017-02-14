@@ -1,0 +1,60 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+                access="global"
+                controller="WaveQueryController">
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <aura:attribute name="recordType" type="String" access="global" default="opportunity"/> 
+    <aura:attribute name="recordTypePlural" type="String" access="global" default="opportunities"/>
+    <aura:attribute name="recordTitle" type="String" access="global" default="All Opportunities"/>     
+    <aura:attribute name="height" type="Integer" access="global" default="300"/>    
+    <aura:attribute name="query" type="String" access="global" default=""/>
+    
+    <div class="container slds-p-around--small">
+        <section class="slds-clearfix">
+          <div class="slds-float--left">
+            <h2 class="slds-text-heading--small">Wave Query Test</h2>
+          </div>
+        </section>        
+        <div class="slds-form-element slds-p-around--small">
+            <label class="slds-form-element__label" for="query">Query (SAQL)</label>
+            <textarea name="query" class="slds-textarea" value="{!v.query}" placeholder="Please enter SAQL here"/>
+        </div>
+        <div class="slds-form-element slds-p-around--small">
+	        <button variant="brand" type="button" label="Execute" class="slds-button slds-button--brand" onclick="{!c.executeQuery}">Fire</button>
+        </div>
+        
+        <div class="slds-page-header">
+            <div class="slds-grid">
+                <div class="slds-col slds-has-flexi-truncate">
+                    <div class="slds-media slds-no-space slds-grow">
+                        <div class="slds-media__figure">
+                            <c:svgIcon svgPath="{!'/img/slds-icons/v7.6.0/standard-sprite/svg/symbols.svg#' + v.recordType}" category="standard" size="medium" name="{!v.recordType}"/>
+                        </div>
+                        <div class="slds-media__body">
+                            <p class="slds-text-title--caps slds-line-height--reset">{!v.recordTypePlural}</p>
+                            <h1 class="slds-page-header__title slds-m-right--small slds-align-middle slds-truncate" title="this should match the Record Title">{!v.recordTitle}</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-no-flex slds-grid slds-align-top">
+                    
+                    <div class="slds-button-group" role="group">
+                        <button class="slds-button slds-button--icon-border">
+                            <c:svgIcon svgPath="/img/slds-icons/v7.6.0/action-sprite/svg/symbols.svg#refresh" button="true" category="standard" size="xxsmall" name="refresh"/>
+                            <span class="slds-assistive-text">Refresh</span>                        
+                        </button>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="listview-table-container slds-scrollable slds-is-relative" style="{!'height: ' + v.height + 'px'}">
+            <table class="slds-table slds-table--bordered listview-table" style="max-height: 300px;">
+                <thead aura:id="thead"></thead>
+                <tbody aura:id="tbody"></tbody>
+            </table>
+        </div>
+    </div>	    
+    
+</aura:component>

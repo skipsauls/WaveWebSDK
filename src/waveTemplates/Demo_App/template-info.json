@@ -1,0 +1,46 @@
+{
+  "templateType" : "app",
+  "label" : "Demo App",
+  "name" : "Demo_App",
+  "templateIcon" : "default.png",
+  "assetIcon" : "16.png",
+  "assetVersion" : 39.0,
+  "variableDefinition" : "variables.json",
+  "uiDefinition" : "ui.json",
+  "rules" : [ {
+    "type" : "templateToApp",
+    "file" : "template-to-app-rules.json"
+  }, {
+    "type" : "appToTemplate",
+    "file" : "app-to-template-rules.json"
+  } ],
+  "releaseInfo" : {
+    "templateVersion" : "1.3",
+    "notesFile" : "releaseNotes.html"
+  },
+  "externalFiles" : [ ],
+  "lenses" : [ {
+    "label" : "Demo Lens",
+    "name" : "Demo_Lens_tp",
+    "condition" : "${Variables.Overrides.createAllLenses}",
+    "file" : "lenses/Demo_Lens.json"
+  } ],
+  "dashboards" : [ {
+    "label" : "Demo Dashboard",
+    "name" : "Demo_Dashboard1_tp",
+    "condition" : "${Variables.Overrides.createAllDashboards}",
+    "file" : "dashboards/Demo_Dashboard1.json"
+  } ],
+  "eltDataflows" : [ {
+    "label" : "eltDataflow",
+    "name" : "eltDataflow",
+    "condition" : "${Variables.Overrides.createDataflow}",
+    "file" : "dataflow/Demo_App.json"
+  } ],
+  "datasetFiles" : [ {
+    "label" : "Demo Oppty Dataset",
+    "name" : "Demo_Oppty_Dataset",
+    "condition" : "${Variables.Overrides.createAllDatasetFiles}",
+    "userXmd" : "dataset_files/Demo_Oppty_Dataset_XMD.json"
+  } ]
+}

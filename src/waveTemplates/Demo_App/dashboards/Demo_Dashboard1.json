@@ -1,0 +1,269 @@
+{
+  "name" : "Demo_Dashboard1_tp",
+  "label" : "Demo Dashboard",
+  "description" : null,
+  "folder" : {
+    "id" : "${App.Folder.Id}"
+  },
+  "state" : {
+    "dataSourceLinks" : [ ],
+    "gridLayouts" : [ {
+      "name" : "Default",
+      "numColumns" : 12,
+      "pages" : [ {
+        "widgets" : [ {
+          "colspan" : 12,
+          "column" : 0,
+          "name" : "chart_1",
+          "row" : 0,
+          "rowspan" : 10,
+          "widgetStyle" : {
+            "borderEdges" : [ ]
+          }
+        }, {
+          "colspan" : 3,
+          "column" : 0,
+          "name" : "listselector_1",
+          "row" : 10,
+          "rowspan" : 2,
+          "widgetStyle" : {
+            "borderEdges" : [ ]
+          }
+        }, {
+          "colspan" : 3,
+          "column" : 3,
+          "name" : "listselector_2",
+          "row" : 10,
+          "rowspan" : 2,
+          "widgetStyle" : {
+            "borderEdges" : [ ]
+          }
+        }, {
+          "colspan" : 3,
+          "column" : 6,
+          "name" : "listselector_3",
+          "row" : 10,
+          "rowspan" : 2,
+          "widgetStyle" : {
+            "borderEdges" : [ ]
+          }
+        }, {
+          "colspan" : 3,
+          "column" : 9,
+          "name" : "listselector_4",
+          "row" : 10,
+          "rowspan" : 2,
+          "widgetStyle" : {
+            "borderEdges" : [ ]
+          }
+        } ]
+      } ],
+      "rowHeight" : "normal",
+      "selectors" : [ ],
+      "style" : {
+        "alignmentX" : "left",
+        "alignmentY" : "top",
+        "backgroundColor" : "#F2F6FA",
+        "cellSpacingX" : 8,
+        "cellSpacingY" : 8,
+        "fit" : "original",
+        "gutterColor" : "#C5D3E0"
+      },
+      "version" : 1.0
+    } ],
+    "layouts" : [ ],
+    "steps" : {
+      "StageName_1" : {
+        "datasets" : [ {
+          "name" : "${App.Datasets.Demo_Oppty_Dataset.Alias}"
+        } ],
+        "isFacet" : true,
+        "isGlobal" : false,
+        "query" : {
+          "query" : {
+            "measures" : [ [ "count", "*" ] ],
+            "groups" : [ "StageName" ]
+          },
+          "version" : -1.0
+        },
+        "selectMode" : "single",
+        "type" : "aggregateflex",
+        "useGlobal" : false
+      },
+      "Type_1" : {
+        "datasets" : [ {
+          "name" : "${App.Datasets.Demo_Oppty_Dataset.Alias}"
+        } ],
+        "isFacet" : true,
+        "isGlobal" : false,
+        "query" : {
+          "query" : {
+            "measures" : [ [ "count", "*" ] ],
+            "groups" : [ "Type" ]
+          },
+          "version" : -1.0
+        },
+        "selectMode" : "single",
+        "type" : "aggregateflex",
+        "useGlobal" : false
+      },
+      "StageName_Type_Name__1" : {
+        "datasets" : [ {
+          "name" : "${App.Datasets.Demo_Oppty_Dataset.Alias}"
+        } ],
+        "isFacet" : true,
+        "isGlobal" : false,
+        "query" : {
+          "query" : {
+            "measures" : [ [ "max", "Amount" ], [ "max", "Probability" ] ],
+            "groups" : [ "StageName", "Type", "Name", "Id" ]
+          },
+          "version" : -1.0
+        },
+        "selectMode" : "single",
+        "type" : "aggregateflex",
+        "useGlobal" : true,
+        "visualizationParameters" : {
+          "visualizationType" : "hbar"
+        }
+      },
+      "Name_1" : {
+        "datasets" : [ {
+          "name" : "${App.Datasets.Demo_Oppty_Dataset.Alias}"
+        } ],
+        "isFacet" : true,
+        "isGlobal" : false,
+        "query" : {
+          "query" : {
+            "measures" : [ [ "count", "*" ] ],
+            "groups" : [ "Name" ]
+          },
+          "version" : -1.0
+        },
+        "selectMode" : "single",
+        "type" : "aggregateflex",
+        "useGlobal" : false
+      },
+      "Id_1" : {
+        "datasets" : [ {
+          "name" : "${App.Datasets.Demo_Oppty_Dataset.Alias}"
+        } ],
+        "isFacet" : true,
+        "isGlobal" : false,
+        "query" : {
+          "query" : {
+            "measures" : [ [ "count", "*" ] ],
+            "groups" : [ "Id" ]
+          },
+          "version" : -1.0
+        },
+        "selectMode" : "single",
+        "type" : "aggregateflex",
+        "useGlobal" : false
+      }
+    },
+    "widgetStyle" : {
+      "backgroundColor" : "#FFFFFF",
+      "borderColor" : "#E6ECF2",
+      "borderEdges" : [ ],
+      "borderRadius" : 0,
+      "borderWidth" : 1
+    },
+    "widgets" : {
+      "listselector_3" : {
+        "parameters" : {
+          "compact" : false,
+          "exploreLink" : false,
+          "instant" : true,
+          "measureField" : "count",
+          "step" : "Name_1",
+          "title" : "Name"
+        },
+        "type" : "listselector"
+      },
+      "listselector_2" : {
+        "parameters" : {
+          "compact" : false,
+          "exploreLink" : false,
+          "instant" : true,
+          "measureField" : "count",
+          "step" : "Type_1",
+          "title" : "Type"
+        },
+        "type" : "listselector"
+      },
+      "listselector_4" : {
+        "parameters" : {
+          "compact" : false,
+          "exploreLink" : false,
+          "instant" : true,
+          "measureField" : "count",
+          "step" : "Id_1",
+          "title" : "Id"
+        },
+        "type" : "listselector"
+      },
+      "listselector_1" : {
+        "parameters" : {
+          "compact" : false,
+          "exploreLink" : false,
+          "instant" : true,
+          "measureField" : "count",
+          "step" : "StageName_1",
+          "title" : "StageName"
+        },
+        "type" : "listselector"
+      },
+      "chart_1" : {
+        "parameters" : {
+          "autoFitMode" : "fit",
+          "showValues" : true,
+          "showPoints" : true,
+          "legend" : {
+            "showHeader" : true,
+            "show" : false,
+            "customSize" : "auto",
+            "position" : "right-top",
+            "inside" : false
+          },
+          "axisMode" : "dual",
+          "visualizationType" : "combo",
+          "missingValue" : "connect",
+          "exploreLink" : true,
+          "title" : {
+            "label" : "Demo Dashboard",
+            "align" : "center",
+            "subtitleLabel" : ""
+          },
+          "trellis" : {
+            "enable" : false,
+            "type" : "x",
+            "parameters" : { },
+            "chartsPerLine" : 4
+          },
+          "measureAxis2" : {
+            "sqrtScale" : false,
+            "showTitle" : true,
+            "showAxis" : true,
+            "title" : ""
+          },
+          "measureAxis1" : {
+            "sqrtScale" : false,
+            "showTitle" : true,
+            "showAxis" : false,
+            "title" : ""
+          },
+          "step" : "StageName_Type_Name__1",
+          "theme" : "wave",
+          "dimensionAxis" : {
+            "showTitle" : true,
+            "customSize" : "auto",
+            "showAxis" : false,
+            "title" : ""
+          }
+        },
+        "type" : "chart"
+      }
+    }
+  }
+}

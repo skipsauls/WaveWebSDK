@@ -1,0 +1,42 @@
+.THIS {
+}
+
+.THIS.container {
+    border: token(borderWidthThin) solid token(colorBorder);
+    padding: token(spacingXSmall);
+    min-width: 25em;
+    width: 100%;
+    overflow: auto;
+    margin: 5px auto;
+}
+
+.THIS .asset-table-container {
+    height: 20em;
+    display: block;
+    overflow: scroll;
+    border-bottom: 1px solid token(colorBorder);
+}
+
+.THIS .asset-table {
+}
+
+.THIS .asset-table th, .THIS .asset-table td {
+	width: 16rem;
+
+}
+
+.THIS .asset-table th.label, .THIS .asset-table td.label {
+	width: 16rem;
+}
+
+.THIS .asset-table th.developer-name, .THIS .asset-table td.developer-name {
+	width: 16rem;    
+}
+
+.THIS .asset-table th.id, .THIS .asset-table td.id {
+	width: 12rem;    
+}
+
+.THIS .asset-table th.actions, .THIS .asset-table td.actions {
+	width: 20rem;    
+}

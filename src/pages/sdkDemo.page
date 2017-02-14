@@ -1,0 +1,117 @@
+<apex:page >
+    <apex:includeLightning />
+    <style>
+        .demo-container {
+            height: 100%;
+        }
+        
+        .demo-container .left {
+            width: 60%;
+            height: 100%;
+            min-height: 500px;
+            display: inline-block;
+            vertical-align: top;    
+        }
+        
+        .demo-container .right {
+            width: 39%;
+            height: 100%;
+            min-height: 500px;
+            display: inline-block;
+            vertical-align: top;    
+        }    
+    </style>
+
+    <div class="container">
+        <section class="slds-clearfix">
+          <div class="slds-float--left">
+            <h2 class="slds-text-heading--small">Wave Filter Test (VF)</h2>
+          </div>
+        </section>
+        <div class="slds-form-element slds-p-around--small">
+            <label class="slds-form-element__label" for="filter">Filter</label>
+            <textarea name="filter" style="width: 30rem; height: 6rem;">
+            {
+                "oppty_test": {
+                    "StageName": [
+                        "Closed Won"
+                    ]
+                }
+            }
+            </textarea>
+        </div>
+        <div class="slds-form-element slds-p-around--small">
+            <label class="slds-form-element__label" for="dashboardId">Dashboard ID:</label>
+            <input type="text" name="dashboardId" class="slds-input" value="0FK0M0000008SDIWA2"/>
+        </div>
+        <div class="slds-form-element slds-p-around--small">
+            <button variant="brand" type="button" label="Fire" class="slds-button slds-button--brand" onclick="handleSendFilter();">Fire</button>
+        </div>
+    </div>
+    
+    <div class="demo-container">
+        <div class="left">
+            <div id="dashboard"/>
+            <div id="listView"/>
+        </div>
+        <div class="right">
+            <div id="filterTest"/>
+            <div id="eventMonitor"/>
+            <div id="recordView"/>
+        </div>
+    </div>
+        
+    <script>
+        var dashboardId = "0FK0M0000008SDIWA2";
+        var dataset = "oppty_test";
+                
+        function handleSendFilter() {
+            var evt = $A.get("e.wave:sendMessageToWave");
+            var filter = document.querySelector('[name=filter]').value;
+            var dashboardId = document.querySelector('[name=dashboardId]').value;
+            var evt = $A.get('e.wave:sendMessageToWave');
+            evt.setParams({
+                payload: filter,
+                instanceId: dashboardId
+            });
+            evt.fire();            
+        }
+    
+        $Lightning.use("c:loApp", function() {
+            $Lightning.createComponent("wave:waveDashboard",
+                {
+                    dashboardId: dashboardId,
+                    height: 450
+                },
+                "dashboard", function(cmp) {
+            });
+            
+            var listViewConfig = {
+                recordType: "opportunity",
+                recordTypePlural: "opportunities", 
+                recordTitle: "All Opportunities",               
+                fields: "Name, StageName, Type, Amount",
+                labels: "Name, Stage, Type, Amount",
+                limit: "200",
+                height: "410",
+                dashboardId: dashboardId,
+                dataset: dataset
+            };    
+
+            $Lightning.createComponent("c:listView", listViewConfig, "listView", function(cmp, msg, err) {
+            }); 
+                          
+            $Lightning.createComponent("c:filterTest", {dashboardId: "0FK0M0000008SDIWA2"},
+                "filterTest", function(cmp) {
+            });
+            
+            $Lightning.createComponent("c:waveEventMonitor", {},
+                "eventMonitor", function(cmp) {
+            });
+            
+            $Lightning.createComponent("c:recordView", {},
+                "recordView", function(cmp) {
+            });
+        });
+    </script>
+</apex:page>

@@ -1,0 +1,60 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes"
+                access="global" >
+    <!--
+    <aura:attribute name="topic" type="String" access="global" default="WaveMessageUpdates"/> 
+	-->
+    <aura:attribute name="topic" type="String" access="global" default="PushEventUpdates"/>  
+    <aura:attribute name="ready" type="Boolean" access="global" default="false"/>
+    <aura:attribute name="pulsing" type="Boolean" access="global" default="false"/>
+    <aura:attribute name="min_pulse_time" type="Integer" access="global" default="2000"/>    
+    <aura:attribute name="ltngUrl" type="String" access="global" description="Necessary for the proxy when using Lightning Out"/>
+    
+    <aura:registerEvent name="sendMessageToWave" type="wave:sendMessageToWave"/>    
+    
+    <!--
+	<aura:handler name="change" value="{!v.pulsing}" action="{!c.pulsingChange}"/>
+	-->
+
+    <!--
+
+	Add methods for showing dashboard, filters, etc.
+
+    <aura:method name="showDashboard" action="{!c.showDashboard}"  description="Displays the specified Wave dashboard"> 
+        <aura:attribute name="dashboardId" type="String"/>
+        <aura:attribute name="developerName" type="String"/>
+    </aura:method>
+    -->
+    
+    <c:proxy aura:id="proxy" ltngUrl="{!v.ltngUrl}"/> 
+    <div class="container">
+        <section class="slds-clearfix">
+          <div class="slds-float--left">
+            <h2 class="slds-text-heading--small">Wave Assistant</h2>
+          </div>
+          <div class="slds-float--right">
+            <div class="{!v.ready == true ? 'pulse_container ready' : 'pulse_container'}">
+                <div class="{!v.pulsing == true ? 'pulse_ring pulsing' : 'pulse_ring'}"></div>
+            </div>              
+          </div>
+        </section>
+       <div class="logging-table-container">
+            <table class="slds-table slds-table--bordered slds-table--cell-buffer logging-table" style="max-height: 300px;">
+                <thead>
+                    <tr class="slds-text-title">
+                        <th scope="col" class="fullname">
+                            <div class="slds-truncate" title="Event">Name</div>
+                        </th>
+                        <th scope="col" class="payload">
+                            <div class="slds-truncate" title="Payload">Payload</div>
+                        </th>
+                        <th scope="col" class="actions">
+                            <div class="slds-truncate" title="Actions">Actions</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody aura:id="tbody">
+                </tbody>
+            </table>
+        </div>        
+    </div>
+</aura:component>

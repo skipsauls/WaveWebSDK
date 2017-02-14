@@ -1,0 +1,278 @@
+<apex:page >
+    <style>
+        form { }
+        form ul {
+            width: 750px;
+            list-style-type: none;
+            list-style-position: outside;
+            margin: 0px;
+            padding: 0px;
+        }
+        form li{
+            padding: 10px; 
+            border-bottom: 1px solid #eee;
+            position: relative;
+        }
+        form li label {
+            width: 5rem;
+            display: inline-block;
+            vertical-align: top;
+            text-align: right;
+            margin-right: 1rem;
+        }
+        form li input {
+            width: 30rem;
+            display: inline-block;
+        }
+        form li textarea {
+            width: 30rem;
+            height: 10rem;
+            display: inline-block;
+        }
+        form li button {
+            width: 10rem;
+            height: 3rem;
+            margin: 0px auto;
+            display: block;
+            background: #F0F0F0;
+            text-align: center;
+        }
+        
+    </style>
+                    
+    <div>
+        <form name="eventdef" id="eventdef">
+            <ul>
+                <li>
+                    <label for="presets">Presets</label>
+                    <select name="presets" id="presets" onchange="selectPreset(this);">
+                        <option value="" disabled="disabled" selected="selected">Select an event...</option>
+                    </select>
+                    </li>
+                <li>
+                    <label for="namespace">Namespace</label>
+                    <input type="text" name="namespace" id="namespace"/>
+                </li>
+                <li>
+                    <label for="name">Name</label>
+                    <input type="text" name="name" id="name"/>
+                </li>
+                <li>
+                    <label for="payload">Payload</label>
+                    <textarea name="payload" id="payload"/>
+                </li>
+                <li>
+                    <button type="button" onclick="fireEvent();">Fire</button>
+                </li>
+            </ul>
+        </form>
+    </div>
+
+    
+    <script>
+
+        var presets = {
+            "filterStageName": {
+                label: "Filter by StageName 'Closed Won'",
+                namespace: "wave",
+                name: "sendMessageToWave",
+                payload: "{\"payload\":{\"oppty_test\": {\"StageName\": [\"Closed Won\"]}},\"instanceId\":\"0FK0M0000008SDIWA2\"}"
+            },
+            "resetStageNameFilter": {
+                label: "Reset StageName Filter",
+                namespace: "wave",
+                name: "sendMessageToWave",
+                payload: {
+                    "payload": {
+                        "oppty_test": {
+                            "StageName": [
+                                ""
+                            ]
+                        }
+                    },
+                    "instanceId": "0FK0M0000008SDIWA2"
+                }
+            },
+            "showDashboard_oppty_test": {
+                label: "Show oppty_test dashboard",
+                namespace: "c",
+                name: "showDashboard",
+                payload: {
+                    "developerName": "oppty_test"
+                }
+            },
+            "showDashboard_DemoDashboard": {
+                label: "Show Demo Dashboard",
+                namespace: "c",
+                name: "showDashboard",
+                payload: {
+                    "developerName": "Demo_Dashboard"
+                }
+            },
+            "navigateToEdgeSLA": {
+                label: "Navigate to Edge SLA",
+                namespace: "force",
+                name: "navigateToSObject",
+                payload: {
+                    "recordId": "0060M000013vets"
+                }
+            }            
+            
+        };
+
+        function addLoadEvent(func) { 
+          var oldonload = window.onload; 
+          if (typeof window.onload != 'function') { 
+             window.onload = func; 
+          } 
+          else { 
+              window.onload = function() { 
+                if (oldonload) { 
+                   oldonload(); 
+                } 
+                func(); 
+              } 
+           } 
+        } 
+           
+        addLoadEvent(function() { 
+            var select = document.querySelector("[name=presets]");
+            console.warn("select: ", select);
+            var preset = null;
+            var option = null;
+            for (var key in presets) {
+                preset = presets[key];
+                option = document.createElement('option');
+                option.value = key;
+                option.label = preset.label;
+                select.appendChild(option);
+            }
+        });
+        
+        function selectPreset(select) {
+            var key = select.value;
+            
+            var preset = presets[key];
+            
+            var form = document.querySelector('[name=eventdef]');
+            form.namespace.value = preset.namespace;
+            form.name.value = preset.name;
+            var p = typeof preset.payload === 'object' ? preset.payload : JSON.parse(preset.payload);
+            form.payload.value = JSON.stringify(p, null, 4);            
+        }
+        
+        function fireEvent(evt) {
+            console.warn('fireEvent: ', evt);
+            var form = document.querySelector('[name=eventdef]');
+            var namespace = form.namespace.value;
+            var name = form.name.value;
+            var payload = form.payload.value;
+            
+            var body = {
+                namespace: namespace,
+                name: name,
+                payload: payload
+            };
+             
+            var config = {
+                url: "https://wavewebsdk-dev-ed.my.salesforce.com/services/apexrest/pushevents",
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json;charset=UTF-8"
+                },
+                body: JSON.stringify(body)                
+            };
+
+            sendRequest(config);
+        }
+    
+    function createRequest() {
+        var xhr = null;
+        if (window.XMLHttpRequest) {
+            xhr = new XMLHttpRequest();
+        } else if (window.ActiveXObject) {
+            xhr = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        return xhr;
+    }            
+    
+    function sendRequest(config) {
+        var req = createRequest();
+        req.onreadystatechange = function() {
+            console.warn('req.readyState: ', req.readyState);
+            console.warn('req.status: ', req.status);
+
+            
+            if (req.readyState != 4) {
+                return;
+            }
+            
+            var response = {};
+            
+            if (req.status < 200 || req.status > 299) {
+                response = {
+                    status: req.status,
+                    statusText: req.statusText,
+                    headers: req.getAllResponseHeaders(),
+                    config: config
+                };
+            } else {
+                
+                response = {
+                    status: req.status,
+                    statusText: req.statusText,
+                    body: req.response,
+                    type: req.responseType,
+                    headers: req.getAllResponseHeaders(),
+                    config: config
+                };
+            }
+            
+            if (req.responseType === "xml") {
+                response.xml = req.responseXML;
+            }
+            
+            console.warn('response: ', response);
+            //var json = JSON.stringify({type: "response", uid: _uid, response: response});
+            //window.parent.postMessage(json, ltng_origin);
+        }
+        
+        //
+        
+        console.warn('config.url: ', config.url);
+        console.warn('method: ', config.method);
+        
+        req.open(config.method, config.url, true);
+        
+        // Set the Authorization header for local calls
+        req.setRequestHeader("Authorization", 'Bearer {!$Api.Session_ID}');
+        
+        if (config.headers) {
+            for (var key in config.headers) {
+                req.setRequestHeader(key, config.headers[key]);
+            }
+        }
+        
+        // Not necessary when using proxy?
+        req.setRequestHeader("Access-Control-Allow-Origin", "*");
+        
+        //req.setRequestHeader("Accept", config.responseType || "json");
+        
+        req.responseType = config.responseType || "json";
+        
+        console.warn('req: ', req);
+        
+        if (config.method === "POST") {
+            console.warn('calling req.send with config.body: ', config.body);
+            req.send(config.body);
+            console.warn('after req.send')
+        } else {
+            req.send();
+        }
+        
+        console.warn('done');
+
+    }    
+    
+    </script>
+</apex:page>

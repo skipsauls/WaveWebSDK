@@ -1,0 +1,4 @@
+<design:component label="Query Test">
+    <design:attribute name="recordTitle" label="Record Title" description="The title to display at the top of the list"/>
+    <design:attribute name="height" label="Height" description="The height of the list - not including the header"/>
+</design:component>

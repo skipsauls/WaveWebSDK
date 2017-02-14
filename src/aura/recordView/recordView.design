@@ -1,0 +1,5 @@
+<design:component label="Record View">
+    <design:attribute name="recordId" label="Record ID" description="ID of the record to display"/>
+    <design:attribute name="msg" label="Message" description="Message to display when record ID is not set"/>
+    <design:attribute name="height" label="Height" description="The height of the component"/>
+</design:component>

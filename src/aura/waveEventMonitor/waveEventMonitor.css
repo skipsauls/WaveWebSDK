@@ -1,0 +1,23 @@
+.THIS.container {
+    border: token(borderWidthThin) solid token(colorBorder);
+    padding: token(spacingXSmall);
+    height: 20em;
+    min-width: 25em;
+    width: 100%;
+    overflow: auto;
+    margin: 5px auto;
+}
+
+.THIS ul {
+    list-style: none;
+}
+
+.THIS .attr-table-container {
+    height: 20em;
+    display: block;
+    overflow: scroll;
+    border-bottom: 1px solid token(colorBorder);
+}
+
+.THIS .attr-table {
+}

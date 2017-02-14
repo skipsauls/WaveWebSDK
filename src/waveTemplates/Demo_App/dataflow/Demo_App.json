@@ -1,0 +1,51 @@
+{
+  "isDeletable": true,
+  "workflowDefinition": {
+    "105": {
+      "action": "sfdcDigest",
+      "parameters": {
+        "fields": [
+          {"name": "Amount"},
+          {"name": "CloseDate"},
+          {"name": "DeliveryInstallationStatus__c"},
+          {"name": "Description"},
+          {"name": "ExpectedRevenue"},
+          {"name": "Fiscal"},
+          {"name": "FiscalQuarter"},
+          {"name": "FiscalYear"},
+          {"name": "ForecastCategory"},
+          {"name": "LeadSource"},
+          {"name": "MainCompetitors__c"},
+          {"name": "Name"},
+          {"name": "NextStep"},
+          {"name": "Id"},
+          {"name": "Type"},
+          {"name": "OrderNumber__c"},
+          {"name": "Probability"},
+          {"name": "TotalOpportunityQuantity"},
+          {"name": "StageName"},
+          {"name": "TrackingNumber__c"},
+          {"name": "IsWon"}
+        ],
+        "object": "Opportunity"
+      }
+    },
+    "106": {
+      "action": "sfdcRegister",
+      "parameters": {
+        "name": "Demo Oppty Dataset",
+        "alias": "${App.Datasets.Demo_Oppty_Dataset.Alias}",
+        "source": "105"
+      }
+    }
+  },
+  "DataflowType": "USER",
+  "_type": "dataflow",
+  "name": "Demo_AppDataflow",
+  "description": "Datafow Copy",
+  "MasterLabel": "Demo App Dataflow",
+  "_url": "/insights/internal_api/v1.0/esObject/workflow//json",
+  "_uid": "",
+  "nextRun": "",
+  "WorkflowStatus": "Inactive"
+}

@@ -1,0 +1,21 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+                access="global" >
+	<aura:handler event="wave:sendMessageToWindow" action="{!c.handleSendMessageToWindow}"/>
+    <aura:attribute name="msg" type="String"
+                    default="Please make a selection in Wave that contains a record ID"
+                    access="GLOBAL"/>
+    <aura:attribute name="recordId" type="String" default="" access="GLOBAL"/>
+    <aura:attribute name="height" type="String" default="650" access="GLOBAL"/>
+
+    <aura:dependency resource="markup://force:navigateToSObject" type="EVENT"/>        
+    <div class="container" style="{!'height:' + v.height + 'px'}">
+        <aura:if isTrue="{!v.recordId == ''}">
+            <div class="msg">
+	            {!v.msg}
+            </div>
+            <aura:set attribute="else">
+	            <force:recordView recordId="{!v.recordId}"/> 
+            </aura:set>
+        </aura:if>
+    </div>	
+</aura:component>

@@ -1,0 +1,14 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" 
+                access="global" >
+    <aura:attribute name="dashboardId" type="String" access="global"/>
+    <aura:attribute name="developerName" type="String" access="global"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler name="change" value="{!v.dashboardId}" action="{!c.dashboardIdChange}"/>
+    <aura:handler name="change" value="{!v.developerName}" action="{!c.developerNameChange}"/>
+	<aura:handler event="c:showDashboard" action="{!c.showDashboard}"/>    
+    <aura:method name="showDashboard" action="{!c.showDashboard}"  description="Displays the specified Wave dashboard"> 
+        <aura:attribute name="dashboardId" type="String"/>
+        <aura:attribute name="developerName" type="String"/>
+    </aura:method>
+    {!v.body}
+</aura:component>

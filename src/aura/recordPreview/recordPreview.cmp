@@ -1,0 +1,42 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+                access="global">
+    <aura:attribute name="msg" type="String"
+                    default="Please make a selection in Wave that contains a record ID"
+                    access="GLOBAL"/>
+    <aura:attribute name="recordId" type="String" default="" access="GLOBAL"/>
+    <aura:attribute name="layoutType" type="String" default="FULL" access="GLOBAL"/>
+    <aura:attribute name="layoutListId" type="String" default="" access="GLOBAL"/>
+    <aura:attribute name="layoutParentId" type="String" default="" access="GLOBAL"/>
+    <aura:attribute name="fields" type="String[]" default="Id,Name,StageName" access="GLOBAL"/>
+    <aura:attribute name="mode" type="String" default="EDIT" access="GLOBAL"/>
+    <aura:attribute name="targetError" type="String" access="GLOBAL"/>
+    <aura:attribute name="targetRecord" type="Object" default="" access="GLOBAL"/>
+
+	<aura:handler event="wave:sendMessageToWindow" action="{!c.handleSendMessageToWindow}"/>
+    
+    <h1>Record ID: {!v.recordId}</h1>
+    <h1>Layout Type: {!v.layoutType}</h1>
+    <h1>Fields:</h1>
+    <ul>
+    <aura:iteration items="{!v.fields}" var="field">
+    	<li>{!field}</li>
+    </aura:iteration>
+ 
+<ui:inputText value="{!v.targetRecord.StageName}" label="Stage"/>
+        
+    </ul>
+    <h1>Mode: {!v.mode}</h1>
+    <h1>Target Error: {!v.targetError}</h1>
+    <force:recordPreview recordId="{!v.recordId}"
+                         layoutType="{!v.layoutType}"
+                         layoutListId="{!v.layoutListId}"
+                         layoutParentId="{!v.layoutParentId}"
+                         fields="{!v.fields}"
+                         mode="{!v.mode}"
+                         targetError="{!v.targetError}"
+                         targetRecord="{!v.targetRecord}"
+                         recordUpdated="{!c.recordUpdated}"
+                         /> 
+
+    
+</aura:component>

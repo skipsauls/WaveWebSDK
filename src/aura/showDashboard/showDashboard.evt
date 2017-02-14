@@ -1,0 +1,4 @@
+<aura:event type="APPLICATION" description="Event template" access="global">
+    <aura:attribute name="developerName" type="String" access="global"/>
+    <aura:attribute name="dashboardId" type="String" access="global"/>
+</aura:event>

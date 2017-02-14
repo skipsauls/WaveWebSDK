@@ -1,0 +1,24 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="filter" type="String" access="GLOBAL"/>
+    <aura:attribute name="dashboardId" type="String" access="GLOBAL" default="0FK0M0000008SDIWA2"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:registerEvent name="sendMessageToWave" type="wave:sendMessageToWave"/>
+    <div class="container">
+        <section class="slds-clearfix">
+          <div class="slds-float--left">
+            <h2 class="slds-text-heading--small">Wave Filter Test</h2>
+          </div>
+        </section>
+        <div class="slds-form-element slds-p-around--small">
+            <label class="slds-form-element__label" for="filter">Filter</label>
+            <ui:inputText class="slds-input" value="{!v.filter}"/>
+        </div>
+        <div class="slds-form-element slds-p-around--small">
+            <label class="slds-form-element__label" for="dashboardId">Dashboard ID:</label>
+            <ui:inputText class="slds-input" value="{!v.dashboardId}"/>
+        </div>
+        <div class="slds-form-element slds-p-around--small">
+	        <button variant="brand" type="button" label="Fire" class="slds-button slds-button--brand" onclick="{!c.handleSendFilter}">Fire</button>
+        </div>
+    </div>
+</aura:component>

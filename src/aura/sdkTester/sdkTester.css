@@ -1,0 +1,19 @@
+.THIS {
+    height: 100%;
+}
+
+.THIS .left {
+    width: 60%;
+    height: 100%;
+    min-height: 500px;
+    display: inline-block;
+    vertical-align: top;    
+}
+
+.THIS .right {
+    width: 40%;
+    height: 100%;
+    min-height: 500px;
+    display: inline-block;
+    vertical-align: top;
+}

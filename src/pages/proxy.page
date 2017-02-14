@@ -1,0 +1,203 @@
+<apex:page applyBodyTag="false" applyHtmlTag="false" showHeader="false" standardStylesheets="false">
+
+    <apex:includeScript value="{!URLFOR($Resource.cometd_zip, 'cometd/cometd.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.cometd_zip, 'cometd/AckExtension.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.cometd_zip, 'cometd/ReloadExtension.js')}"/>
+    
+    <script type="text/javascript">
+    var ltng_origin = "{!$CurrentPage.Parameters.ltng_origin}";
+    var ltng_url = "{!$CurrentPage.Parameters.ltng_url}";
+    var _uid = "{!$CurrentPage.Parameters.ltng_uid}";
+    
+    window.addEventListener("message", messageHandler, true);
+    var json = JSON.stringify({type: "ready", uid: _uid});
+    window.parent.postMessage(json, "{!$CurrentPage.Parameters.ltng_origin}");
+
+    
+    var _cometd = null;
+    var _subscriptions = {};
+    
+    function receive(message) {
+        var subs = _subscriptions[message.channel];
+        var sub = null;
+        var config = null;
+        var response = null;
+        for (var i = 0; i < subs.length; i++) {       
+            sub = subs[i];
+            config = sub.config;
+            response = {
+                config: sub.config,
+                message: message
+            };
+            var json = JSON.stringify({type: "response", uid: _uid, response: response});
+            window.parent.postMessage(json, ltng_origin);
+        }
+    }
+    
+    function handshake(config) {
+        config = config || {};
+                
+        _cometd = new org.cometd.CometD();
+        
+        var version = config.version || "39.0";
+        var cometdURL = location.protocol + "//" + location.host + "/cometd/" + version;
+        //var cometdURL = window.location; //ltng_url || (location.protocol + "//" + location.host);
+        //cometdURL += "/cometd/" + version;
+        
+        _cometd.configure({
+            url: cometdURL,
+            logLevel: config.logLevel || 'info',
+            requestHeaders: { 'Authorization': 'Bearer {!$Api.Session_ID}' } 
+        });
+        _cometd.websocketEnabled = false;
+        //_cometd.unregisterTransport('long-polling');
+        _cometd.handshake();
+
+        var json = JSON.stringify({type: "response", uid: _uid, response: {ready: true, config: config}});
+        window.parent.postMessage(json, ltng_origin);        
+        
+    }
+    
+    function subscribe(config) {
+        var topic = config.topic;
+        if (_cometd === null) {
+            handshake();
+        }
+        
+        var sub = _cometd.subscribe('/topic/' + topic, receive);            
+        var subs = _subscriptions[sub.channel] || [];
+        subs.push({
+            config: config,
+            subscription: sub        
+        });
+        
+        _subscriptions[sub.channel] = subs;
+        
+        var json = JSON.stringify({type: "response", uid: _uid, response: {subscribed: true, config: config}});
+        window.parent.postMessage(json, ltng_origin);        
+    }
+    
+    function unsubscribe(config) {
+        var topic = config.topic;
+        var subs = _subscriptions['/topic/' + topic];
+        if (_cometd && subs) {
+            var sub = null;
+            var config = null;
+            var response = null;
+            for (var i = 0; i < subs.length; i++) {       
+                sub = subs[i];
+                _cometd.unsubscribe(sub.subscription);
+            }
+            
+            var json = JSON.stringify({type: "response", uid: _uid, response: {unsubscribed: true, config: config}});
+            window.parent.postMessage(json, ltng_origin);        
+        }
+    }
+
+    
+    function messageHandler(event) {
+        if (event.origin === "{!$CurrentPage.Parameters.ltng_origin}") {
+            event.preventDefault();
+            event.stopPropagation();
+            
+            var data = JSON.parse(event.data);
+            var type = data.type;
+            var uid = data.uid;
+            
+            if (type === "request" && _uid === uid) {
+                sendRequest(data.config);
+            } else if (type === "handshake") {
+                handshake(data.config);    
+            } else if (type === "subscribe") {
+                subscribe(data.config);    
+            } else if (type === "unsubscribe") {
+                unsubscribe(data.config);
+            }
+        }
+    }
+    
+    function createRequest() {
+        var xhr = null;
+        if (window.XMLHttpRequest) {
+            xhr = new XMLHttpRequest();
+        } else if (window.ActiveXObject) {
+            xhr = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        return xhr;
+    }            
+    
+    function sendRequest(config) {
+        var req = createRequest();
+        req.onreadystatechange = function() {
+            if (req.readyState != 4) {
+                return;
+            }
+            
+            var response = {};
+            
+            if (req.status < 200 || req.status > 299) {
+                response = {
+                    status: req.status,
+                    statusText: req.statusText,
+                    headers: req.getAllResponseHeaders(),
+                    config: config
+                };
+            } else {
+                
+                response = {
+                    status: req.status,
+                    statusText: req.statusText,
+                    body: req.response,
+                    type: req.responseType,
+                    headers: req.getAllResponseHeaders(),
+                    config: config
+                };
+            }
+            
+            if (req.responseType === "xml") {
+                response.xml = req.responseXML;
+            }
+            
+            var json = JSON.stringify({type: "response", uid: _uid, response: response});
+            window.parent.postMessage(json, ltng_origin);
+        }
+        
+        //
+        
+        if (config.url.indexOf("http") < 0) {
+            req.open(config.method, config.url, true);
+            // Set the Authorization header for local calls
+            req.setRequestHeader("Authorization", 'Bearer {!$Api.Session_ID}');
+            
+        } else {
+            // Use the proxy
+            req.open(config.method, "/services/proxy", true);
+            
+            // Set the endpoint accordingly for using the proxy
+            req.setRequestHeader("SalesforceProxy-Endpoint", config.url);
+            
+        }
+        
+        if (config.headers) {
+            for (var key in config.headers) {
+                req.setRequestHeader(key, config.headers[key]);
+            }
+        }
+        
+        // Not necessary when using proxy?
+        req.setRequestHeader("Access-Control-Allow-Origin", "*");
+        
+        //req.setRequestHeader("Accept", config.responseType || "json");
+        
+        req.responseType = config.responseType || "json";
+        
+        if (config.method === "POST") {
+            req.send(config.body);
+        } else {
+            req.send();
+        }
+        
+
+    }
+    </script>
+</apex:page>

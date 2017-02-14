@@ -1,0 +1,13 @@
+.THIS.container {
+    border: token(borderWidthThin) solid token(colorBorder);
+    padding: token(spacingXSmall);
+    min-width: 25em;
+    width: 100%;
+    overflow: auto;
+    margin: 5px auto;
+}
+
+.THIS .uiInputText {
+    display: inline-block;
+    margin-right: 5px;
+}

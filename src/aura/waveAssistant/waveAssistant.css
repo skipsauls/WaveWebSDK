@@ -1,0 +1,84 @@
+.THIS {
+}
+
+.THIS.container {
+    border: token(borderWidthThin) solid token(colorBorder);
+    min-height: 32px;
+    min-width: 100px;
+	display: inline-block;
+    overflow: auto;
+    margin: 2px auto;
+    padding: token(spacingXSmall);
+}
+
+
+
+.THIS .logging-table-container {
+    height: 20em;
+    display: block;
+    overflow: scroll;
+    border-bottom: 1px solid token(colorBorder);
+}
+
+.THIS .logging-table {
+}
+
+.THIS .logging-table td {
+	padding: 4px;
+}
+
+.THIS .logging-table td[name=fullname], .THIS .logging-table th.fullname {
+	width: 14rem;
+}
+
+.THIS .logging-table td[name=payload], .THIS .logging-table th.payload {
+	width: 30rem;
+}
+
+.THIS .logging-table td[name=actions], .THIS .logging-table th.actions {
+	width: 10rem;
+}
+
+.THIS .logging-table textarea {
+    height: 6rem;
+    width: 100%;
+    overflow: auto;
+    resize: none;
+    border: 0px none;
+}
+
+
+.THIS .pulse_container {
+}
+
+.THIS .pulse_container.ready {
+}
+
+.THIS .pulse_container .pulse_ring {
+    margin: 2px;
+    border: 3px solid #9090CC;
+    -webkit-border-radius: 30px;
+    height: 32px;
+    width: 32px;
+    opacity: 0.1;
+}
+
+.THIS .pulse_container.ready .pulse_ring {
+    opacity: 0.3;
+}
+
+.THIS .pulse_container .pulse_ring.pulsing {
+    opacity: 0.1;
+}
+
+.THIS .pulse_container.ready .pulse_ring.pulsing {
+    -webkit-animation: pulsate 1s ease-out;
+    -webkit-animation-iteration-count: infinite; 
+    opacity: 0.0;
+}
+
+@-webkit-keyframes pulsate {
+    0% {-webkit-transform: scale(0.5, 0.5); opacity: 0.1;}
+    50% {opacity: 1.0;}
+    100% {-webkit-transform: scale(1.0, 1.0); opacity: 0.1;}
+}

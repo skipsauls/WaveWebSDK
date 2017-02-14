@@ -1,0 +1,51 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" 
+                access="global" >
+    <aura:attribute name="asset_types" type="String[]" default="dashboards,datasets,folders,lenses,templates"/>
+    <aura:attribute name="selected_asset_type" type="String"/>
+    <aura:attribute name="selected_id" type="String" access="global"/>
+    <aura:attribute name="ltngUrl" type="String" access="global" description="Necessary for the proxy when using Lightning Out"/>
+    
+    <c:proxy aura:id="proxy" ltngUrl="{!v.ltngUrl}"/>        
+    <div class="container">
+        <section class="slds-clearfix">
+          <div class="slds-float--left">
+            <h2 class="slds-text-heading--small">Wave Explorer</h2>
+          </div>
+        </section>        
+        
+        <div class="slds-form-element slds-p-around--small">
+            <lightning:select value="{!v.selected_asset_type}" name="select" label="Select a Wave Asset" required="true" onchange="{!c.listAssets}">
+                <option value="">Please select...</option>
+                <aura:iteration items="{!v.asset_types}" var="asset_type">
+                    <option text="{!asset_type}" value="{!asset_type}"></option>
+                </aura:iteration>
+            </lightning:select>
+        </div>
+        
+        <div class="asset-table-container">
+            <table class="slds-table slds-table--bordered slds-table--cell-buffer asset-table" style="max-height: 300px;">
+                <thead>
+                    <tr class="slds-text-title">
+                        <th scope="col" class="label">
+                            <div class="slds-truncate" title="Label">Label</div>
+                        </th>
+                        <th scope="col" class="name">
+                            <div class="slds-truncate" title="Developer Name">Developer Name</div>
+                        </th>
+                        <th scope="col" class="id">
+                            <div class="slds-truncate" title="ID">ID</div>
+                        </th>
+                        <th scope="col" class="actions">
+                            <div class="slds-truncate" title="Actions">Actions</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody aura:id="tbody">
+                </tbody>
+            </table>
+        </div>
+        
+        <c:dashboardViewer aura:id="dashboardViewer"/>
+    </div>
+    
+</aura:component>

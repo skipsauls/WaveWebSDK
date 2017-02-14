@@ -1,0 +1,4 @@
+<design:component label="Record Preview">
+    <design:attribute name="mode" label="Mode" description="The mode for the component (view/edit)"/>
+    <design:attribute name="recordId" label="Record ID" description="ID of the record to view/edit"/>	
+</design:component>

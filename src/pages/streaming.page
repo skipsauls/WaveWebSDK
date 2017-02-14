@@ -1,0 +1,54 @@
+<apex:page >
+
+<apex:includeScript value="{!URLFOR($Resource.cometd_zip, 'cometd/cometd.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.cometd_zip, 'cometd/AckExtension.js')}"/>
+<apex:includeScript value="{!URLFOR($Resource.cometd_zip, 'cometd/ReloadExtension.js')}"/>
+    
+<button onclick="handshake();">Handshake</button>
+<input type="text" id="topic" value="WaveMessageUpdates"/>
+<button onclick="subscribe();">Subscribe</button>
+<button onclick="unsubscribe();">Unsubscribe</button>
+        
+<script>
+
+var _cometd = new org.cometd.CometD();
+
+function handshake() {
+    
+    console.warn('handhake');
+    
+    var cometdURL = location.protocol + "//" + location.host + "/cometd/39.0";
+    
+    _cometd.configure({
+        url: cometdURL,
+        logLevel: 'debug',
+        requestHeaders: { 'Authorization': 'Bearer {!$Api.Session_ID}' } 
+    });
+    _cometd.websocketEnabled = false;
+    //_cometd.unregisterTransport('long-polling');
+    _cometd.handshake();
+
+}
+
+function subscribe(topic) {
+    topic = topic || document.getElementById('topic').value;
+    console.warn('subscribe: ', topic);
+    _cometd.subscribe('/topic/' + topic, receive);
+}
+
+function unsubscribe(topic) {
+    topic = topic || document.getElementById('topic').value;
+    console.warn('unsubscribe: ', topic);
+    _cometd.unsubscribe('/topic/' + topic, receive);
+}
+
+
+
+function receive(message) {
+    console.warn('receive: ', message);
+    
+}
+
+</script>        
+        
+</apex:page>
